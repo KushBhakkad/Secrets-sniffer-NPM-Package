@@ -14,8 +14,11 @@ try {
     process.exit(1);
 }
 
-// Directories to ignore
-const IGNORED_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.env', 'package-lock.json']);
+// Directories and files to ignore
+const IGNORED_PATHS = new Set([
+    'node_modules', '.git', 'dist', 'build', 'coverage', // Directories
+    '.env', 'package-lock.json' // Files
+]);
 
 // Function to mask sensitive values
 const maskValue = (value) => {
@@ -52,7 +55,7 @@ const scanFile = (filePath) => {
     return results;
 };
 
-// Function to recursively scan a directory (skipping ignored directories)
+// Function to recursively scan a directory (skipping ignored directories and files)
 const scanDirectory = (dirPath) => {
     let allResults = [];
 
@@ -62,11 +65,12 @@ const scanDirectory = (dirPath) => {
             const fullPath = path.join(dirPath, file);
             const stats = fs.statSync(fullPath);
 
+            if (IGNORED_PATHS.has(file)) {  // Skip both directories and files
+                console.log(chalk.yellow(`🚫 Skipping: ${fullPath}`));
+                return;
+            }
+
             if (stats.isDirectory()) {
-                if (IGNORED_DIRS.has(file)) {
-                    console.log(chalk.yellow(`🚫 Skipping directory: ${fullPath}`));
-                    return; // Skip ignored directories
-                }
                 allResults = [...allResults, ...scanDirectory(fullPath)];
             } else if (stats.isFile()) {
                 const results = scanFile(fullPath);
