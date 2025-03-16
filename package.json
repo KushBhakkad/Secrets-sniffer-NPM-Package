@@ -1,0 +1,28 @@
+{
+  "name": "secret-sniffer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "secrets-sniffer": "secrets-sniffer.index.js"
+  },
+  "scripts": {
+    "start": "node secrets-sniffer.index.js"
+  },
+  "keywords": ["secrets", "scanner", "sniffer", "security", "cli", "ci/cd", "github", "commits", "passwords", "api", "information"],
+  "author": "Kush Sanjay Bhakkad <kushbhakkad@gmail.com>",
+  "license": "MIT",
+  "description": "A CLI tool to scan files for sensitive information.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KushBhakkad/Secrets-sniffer-NPM-Package"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "inquirer": "^12.4.3",
+    "minimatch": "^10.0.1",
+    "regex-parser": "^2.3.1",
+    "simple-git": "^3.27.0",
+    "strip-ansi": "^7.1.0"
+  }
+}

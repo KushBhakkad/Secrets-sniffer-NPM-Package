@@ -1,0 +1,63 @@
+name: Security Scan
+
+on: [push, pull_request]
+
+permissions:
+  contents: write  # Required for creating a release
+  actions: read    
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear Cached GitHub Actions  
+        run: rm -rf ${{ github.workspace }}/_actions  
+
+      - name: Checkout Repository  
+        uses: actions/checkout@v4  
+
+      - name: Install Node.js  
+        uses: actions/setup-node@v3  
+        with:  
+          node-version: 20  
+
+      - name: Install Dependencies  
+        run: npm install  
+
+      - name: Run Security Scan  
+        run: node secrets-sniffer.index.js
+
+      - name: Ensure scan_results.json Exists  
+        run: |
+          if [ ! -f scan_results.json ]; then 
+            echo '[]' > scan_results.json  # Use empty JSON array for consistency
+          fi
+
+      - name: Upload JSON Report as an Artifact  
+        uses: actions/upload-artifact@v4  
+        with:  
+          name: security-scan-results  
+          path: scan_results.json  
+
+      - name: Create GitHub Release 📢  
+        uses: softprops/action-gh-release@v2  
+        with:  
+          tag_name: "v1.0.${{ github.run_number }}"  # Uses incremental versioning  
+          name: "Security Scan Report - Run #${{ github.run_number }}"  
+          body: "🔍 Security scan results for commit `${{ github.sha }}`.\nDownload the report below."  
+          files: scan_results.json  
+
+      - name: Generate Summary Report
+        run: |
+          echo "### Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -s scan_results.json ]; then
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat scan_results.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ No security issues found!" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Debug - List Files  
+        run: ls -R

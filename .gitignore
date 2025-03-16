@@ -1,0 +1,25 @@
+# Ignore node_modules and dependency files
+node_modules/
+package-lock.json
+
+# Ignore Python virtual environments and cache
+venv/
+__pycache__/
+
+# Ignore environment variables and config files
+.env
+config.json
+
+# Ignore logs and temporary files
+*.log
+logs/
+temp/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
