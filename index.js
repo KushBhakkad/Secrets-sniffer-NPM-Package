@@ -15,7 +15,7 @@ try {
 }
 
 // Directories to ignore
-const IGNORED_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.env']);
+const IGNORED_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.env', 'package-lock.json']);
 
 // Function to mask sensitive values
 const maskValue = (value) => {
