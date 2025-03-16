@@ -1,6 +1,5 @@
 # 📦 secrets-sniffer
 [![npm version](https://img.shields.io/npm/v/secrets-sniffer.svg)](https://www.npmjs.com/package/secrets-sniffer)
-[![license](https://img.shields.io/npm/l/secrets-sniffer.svg)](LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/KushBhakkad/secrets-sniffer-NPM-Package)](https://github.com/KushBhakkad/secrets-sniffer-NPM-Package/issues)
 [![GitHub stars](https://img.shields.io/github/stars/KushBhakkad/secrets-sniffer-NPM-Package)](https://github.com/KushBhakkad/secrets-sniffer-NPM-Package/stargazers)
 
