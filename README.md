@@ -12,7 +12,7 @@
 
 Install via npm:
 ```sh
-npm install secrets-sniffer
+npm -g install secrets-sniffer
 ```
 
 Or using yarn:
@@ -26,7 +26,7 @@ yarn global add secrets-sniffer
 
 ### 1️⃣ Run as a CLI tool
 ```sh
-npx secrets-sniffer
+secrets-sniffer
 ```
 
 #### ✅ Example Output:
@@ -50,7 +50,7 @@ You can define your own secret patterns in a `config.json` file. This file allow
 #### 📄 Create `config.json`
 ```sh
 mkdir -p $(pwd)
-cat <<EOL > config.json
+cat << 'EOL' > config.json
 {
     "patterns": {
         "Custom API Key": "/custom_api_key\\s*=\\s*['\"][A-Za-z0-9]{10,}['\"]/",
@@ -62,7 +62,7 @@ EOL
 
 #### Now run as a CLI tool:
 ```sh
-npx secrets-sniffer
+secrets-sniffer
 ```
 
 #### ✅ Example Output when using a custom config:
@@ -86,55 +86,56 @@ To automate security scanning in CI/CD, create a workflow file in `.github/workf
 #### 📄 Create `.github/workflows/security_scan.yml`
 ```sh
 mkdir -p .github/workflows
-cat <<EOL > .github/workflows/security_scan.yml
+
+cat << 'EOL' > .github/workflows/security_scan.yml
 name: Security Scan
 
 on: [push, pull_request]
 
 permissions:
   contents: write  # Required for creating a release
-  actions: read    
+  actions: read
 
 jobs:
   security-scan:
     runs-on: ubuntu-latest
     steps:
-      - name: Clear Cached GitHub Actions  
-        run: rm -rf ${{ github.workspace }}/_actions  
+      - name: Clear Cached GitHub Actions
+        run: rm -rf ${{ github.workspace }}/_actions
 
-      - name: Checkout Repository  
-        uses: actions/checkout@v4  
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Install Node.js  
-        uses: actions/setup-node@v3  
-        with:  
-          node-version: 20  
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-      - name: Install Dependencies  
-        run: npm install  
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Run Security Scan  
-        run: node node_modules.secrets-sniffer.index.js 
+      - name: Run Security Scan
+        run: node node_modules/secrets-sniffer/index.js
 
-      - name: Ensure scan_results.json Exists  
+      - name: Ensure scan_results.json Exists
         run: |
           if [ ! -f scan_results.json ]; then
-            echo '[]' > scan_results.json  
+            echo '[]' > scan_results.json
           fi
 
-      - name: Upload JSON Report as an Artifact  
-        uses: actions/upload-artifact@v4  
-        with:  
-          name: security-scan-results  
-          path: scan_results.json  
+      - name: Upload JSON Report as an Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-results
+          path: scan_results.json
 
-      - name: Create GitHub Release 📢  
-        uses: softprops/action-gh-release@v2  
-        with:  
-          tag_name: "v1.0.${{ github.run_number }}"  
-          name: "Security Scan Report - Run #${{ github.run_number }}"  
-          body: "🔍 Security scan results for commit `${{ github.sha }}`.\nDownload the report below."  
-          files: scan_results.json  
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v1.0.${{ github.run_number }}"
+          name: "Security Scan Report - Run #${{ github.run_number }}"
+          body: "🔍 Security scan results for commit `${{ github.sha }}`.\nDownload the report below."
+          files: scan_results.json
 
       - name: Generate Summary Report
         run: |
@@ -147,8 +148,8 @@ jobs:
           else
             echo "✅ No security issues found!" >> $GITHUB_STEP_SUMMARY
           fi
-      
-      - name: Debug - List Files  
+
+      - name: Debug - List Files
         run: ls -R
 EOL
 ```
