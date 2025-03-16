@@ -25,12 +25,12 @@ jobs:
         run: npm install  
 
       - name: Run Security Scan  
-        run: node index.js
+        run: node secrets-sniffer.index.js 
 
       - name: Ensure scan_results.json Exists  
         run: |
-          if [ ! -f scan_results.json ]; then 
-            echo '[]' > scan_results.json  # Use empty JSON array for consistency
+          if [ ! -f scan_results.json ]; then
+            echo '[]' > scan_results.json  
           fi
 
       - name: Upload JSON Report as an Artifact  
@@ -42,7 +42,7 @@ jobs:
       - name: Create GitHub Release 📢  
         uses: softprops/action-gh-release@v2  
         with:  
-          tag_name: "v1.0.${{ github.run_number }}"  # Uses incremental versioning  
+          tag_name: "v1.0.${{ github.run_number }}"  
           name: "Security Scan Report - Run #${{ github.run_number }}"  
           body: "🔍 Security scan results for commit `${{ github.sha }}`.\nDownload the report below."  
           files: scan_results.json  

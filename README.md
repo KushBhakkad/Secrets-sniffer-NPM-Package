@@ -12,7 +12,7 @@
 
 Install via npm:
 ```sh
-npm install -g secrets-sniffer
+npm install secrets-sniffer
 ```
 
 Or using yarn:
@@ -26,16 +26,16 @@ yarn global add secrets-sniffer
 
 ### 1️⃣ Run as a CLI tool
 ```sh
-secrets-sniffer
+npx secrets-sniffer
 ```
 
 #### ✅ Example Output:
 ```sh
-🔧 Loading additional regex patterns from config.json...
-❌ Error loading config.json. Using only default patterns.
+⚠️ No config.json found. Using only default patterns.
 🔍 Scanning directory: .
-🚫 Skipping directory: .git
-🚫 Skipping directory: node_modules
+🚫 Skipping: .git
+🚫 Skipping: node_modules
+🚫 Skipping: package-lock.json
 ✅ JSON report saved: D:\secrets-sniffer\scan_results.json
 📖 Log saved: D:\secrets-sniffer\scan_results.log
 ✅ Scan complete!
@@ -60,12 +60,18 @@ cat <<EOL > config.json
 EOL
 ```
 
+#### Now run as a CLI tool:
+```sh
+npx secrets-sniffer
+```
+
 #### ✅ Example Output when using a custom config:
 ```sh
-🔧 Loading additional regex patterns from secrets-sniffer.config.json...
+🔧 Loading additional regex patterns from config.json...
 🔍 Scanning directory: .
-🚫 Skipping directory: .git
-🚫 Skipping directory: node_modules
+🚫 Skipping: .git
+🚫 Skipping: node_modules
+🚫 Skipping: package-lock.json
 ✅ JSON report saved: D:\secrets-sniffer\scan_results.json
 📖 Log saved: D:\secrets-sniffer\scan_results.log
 ✅ Scan complete!
