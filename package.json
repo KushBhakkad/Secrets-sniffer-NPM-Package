@@ -4,10 +4,10 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "secrets-sniffer": "secrets-sniffer.index.js"
+    "secrets-sniffer": "index.js"
   },
   "scripts": {
-    "start": "node secrets-sniffer.index.js"
+    "start": "node index.js"
   },
   "keywords": ["secrets", "scanner", "sniffer", "security", "cli", "ci/cd", "github", "commits", "passwords", "api", "information"],
   "author": "Kush Sanjay Bhakkad <kushbhakkad@gmail.com>",

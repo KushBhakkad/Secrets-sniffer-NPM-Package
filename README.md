@@ -114,7 +114,7 @@ jobs:
         run: npm install  
 
       - name: Run Security Scan  
-        run: node secrets-sniffer.index.js 
+        run: node node_modules.secrets-sniffer.index.js 
 
       - name: Ensure scan_results.json Exists  
         run: |
