@@ -32,13 +32,20 @@ const defaultPatterns = [
     { name: "JWT", regex: /eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/ }
 ];
 
+// Directories and files to ignore
+const default_IGNORED_PATHS = new Set([
+    'node_modules', '.git', 'dist', 'build', 'coverage', // Directories
+    '.env', 'package-lock.json' // Files
+]);
+
 // Load patterns from config.json if available
 const configPath = path.join(process.cwd(), 'config.json');
 let patterns = [...defaultPatterns]; // Start with default patterns
+let ignoredPaths = new Set(default_IGNORED_PATHS);
 
 try {
     if (fs.existsSync(configPath)) {
-        console.log("🔧 Loading additional regex patterns from config.json...");
+        console.log("🔧 Loading additional customizations from config.json...");
         const configData = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
         if (configData.patterns) {
@@ -49,12 +56,15 @@ try {
 
             patterns = [...defaultPatterns, ...customPatterns]; // Merge default and custom patterns
         }
+        if (configData.ignored_paths) {
+            configData.ignored_paths.forEach((p) => ignoredPaths.add(p));
+        }
     } else {
-        console.log("⚠️ No config.json found. Using only default patterns.");
+        console.log("⚠️ No config.json found. Using only default patterns and ignored paths.");
     }
 } catch (error) {
-    console.error("❌ Error loading config.json. Using only default patterns.");
+    console.error("❌ Error loading config.json. Using only default patterns and ignored paths.");
 }
 
 // Export merged patterns
-export { patterns };
+export { patterns, ignoredPaths };

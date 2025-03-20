@@ -6,19 +6,16 @@ import stripAnsi from 'strip-ansi'; // Strip ANSI colors before saving logs
 
 // Load sensitive patterns
 let patterns = [];
+// Directories and files to ignore
+let IGNORED_PATHS = new Set([]);
 try {
-    const { patterns: importedPatterns } = await import('./patterns.js');
+    const { patterns: importedPatterns, ignoredPaths: importedIgnoredPaths } = await import('./loadconfig.js');
     patterns = importedPatterns;
+    IGNORED_PATHS = importedIgnoredPaths;
 } catch (error) {
-    console.error(chalk.red(`⚠️ Error loading patterns.js: ${error.message}`));
+    console.error(chalk.red(`⚠️ Error loading loadconfig.js: ${error.message}`));
     process.exit(1);
 }
-
-// Directories and files to ignore
-const IGNORED_PATHS = new Set([
-    'node_modules', '.git', 'dist', 'build', 'coverage', // Directories
-    '.env', 'package-lock.json' // Files
-]);
 
 // Function to mask sensitive values
 const maskValue = (value) => {

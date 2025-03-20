@@ -30,7 +30,7 @@ secrets-sniffer
 
 #### ✅ Example Output:
 ```sh
-⚠️ No config.json found. Using only default patterns.
+⚠️ No config.json found. Using only default patterns and ignored paths.
 🔍 Scanning directory: .
 🚫 Skipping: .git
 🚫 Skipping: node_modules
@@ -64,13 +64,69 @@ EOL
 secrets-sniffer
 ```
 
+
+### 3️⃣ Customize Directories and Files to ignore
+
+You can define your own file and directory paths to ignore scanning in the `config.json` file too.
+
+#### 📄 Create `config.json`
+```sh
+mkdir -p $(pwd)
+cat << 'EOL' > config.json
+{
+    "ignored_paths": [
+        "secrets.txt",
+        "logs",
+        "temp"
+    ]
+}
+EOL
+```
+
+#### Now run as a CLI tool:
+```sh
+secrets-sniffer
+```
+
+
+### 4️⃣ Customize Secret Patterns and Directories and Files to ignore together
+
+You can define your own secret patterns as well as file and directory paths to ignore scanning in the `config.json` file too.
+
+#### 📄 Create `config.json`
+```sh
+mkdir -p $(pwd)
+cat << 'EOL' > config.json
+{
+    "patterns": {
+        "Custom API Key": "/custom_api_key\\s*=\\s*['\"][A-Za-z0-9]{10,}['\"]/",
+        "Custom Secret": "/custom_secret\\s*=\\s*['\"][A-Za-z0-9]{15,}['\"]/"
+    },
+    "ignored_paths": [
+        "secrets.txt",
+        "logs",
+        "temp"
+    ]
+}
+EOL
+```
+
+#### Now run as a CLI tool:
+```sh
+secrets-sniffer
+```
+
+
 #### ✅ Example Output when using a custom config:
 ```sh
-🔧 Loading additional regex patterns from config.json...
+🔧 Loading additional customizations from config.json...
 🔍 Scanning directory: .
 🚫 Skipping: .git
 🚫 Skipping: node_modules
 🚫 Skipping: package-lock.json
+🚫 Skipping: test_scan\logs
+🚫 Skipping: test_scan\secrets.txt
+🚫 Skipping: test_scan\temp
 ✅ JSON report saved: D:\secrets-sniffer\scan_results.json
 📖 Log saved: D:\secrets-sniffer\scan_results.log
 ✅ Scan complete!
@@ -78,7 +134,7 @@ secrets-sniffer
 
 ---
 
-### 3️⃣ Integrate with CI/CD (GitHub Actions)
+### 5️⃣ Integrate with CI/CD (GitHub Actions)
 
 To automate security scanning in CI/CD, create a workflow file in `.github/workflows/security_scan.yml`.
 
@@ -162,7 +218,7 @@ Once added, GitHub Actions will run the sniffer on every push and pull request, 
 ✔ Lightweight & Fast  
 ✔ Pre-commit hook to prevent secrets from being committed  
 ✔ CI/CD integration with GitHub Actions  
-✔ Support for custom regex patterns  
+✔ Support for various customizations  
 ✔ Well-documented and actively maintained  
 
 ---
